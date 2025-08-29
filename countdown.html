@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚽ Soccer Season Kickoff Countdown</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      padding: 40px;
+      text-align: center;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      color: #e67e22;
+    }
+
+    .countdown-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .countdown-box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.6em;
+      margin-bottom: 20px;
+      color: #2980b9;
+      line-height: 1.4;
+    }
+
+    .clock-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .time-block {
+      background: #fefefe;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .time-value {
+      font-size: 2.5em;
+      color: #e67e22;
+      font-weight: bold;
+    }
+
+    .time-label {
+      font-size: 1em;
+      color: #2980b9;
+      margin-top: 4px;
+    }
+
+    .expired {
+      font-size: 1.6em;
+      color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Let the Rec Season Begin! 🎉</h1>
+  <div class="countdown-container" id="countdownContainer"></div>
+
+  <script>
+    const deadlines = [
+      {
+        title: "Countdown to Opening Day! <br> ⚽ Saturday, September 6th! ⚽",
+        date: "2025-09-05T23:59:00-04:00"
+      }
+    ];
+
+    const container = document.getElementById("countdownContainer");
+
+    deadlines.forEach((entry, index) => {
+      const box = document.createElement("div");
+      box.className = "countdown-box";
+      box.innerHTML = `
+        <div class="title">${entry.title}</div>
+        <div class="clock-grid" id="clock-${index}">Loading...</div>
+      `;
+      container.appendChild(box);
+
+      const deadline = new Date(entry.date);
+      const clock = document.getElementById(`clock-${index}`);
+
+      const updateClock = () => {
+        const now = new Date().getTime();
+        const timeLeft = deadline.getTime() - now;
+
+        if (timeLeft <= 0) {
+          clock.innerHTML = `<span class="expired">🎊 It's Game Time! See you on the field! ⚽</span>`;
+          return;
+        }
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        clock.innerHTML = `
+          <div class="time-block">
+            <div class="time-value">${days}</div>
+            <div class="time-label">days</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value">${hours}</div>
+            <div class="time-label">hours</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value">${minutes}</div>
+            <div class="time-label">minutes</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value">${seconds}</div>
+            <div class="time-label">seconds</div>
+          </div>
+        `;
+      };
+
+      updateClock();
+      setInterval(updateClock, 1000);
+    });
+  </script>
+</body>
+</html>
